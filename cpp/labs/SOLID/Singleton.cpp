@@ -1,5 +1,7 @@
 #include <iostream>
 
+// https://refactoring.guru/design-patterns/singleton
+
 class Singleton {
 private:
 
