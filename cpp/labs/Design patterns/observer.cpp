@@ -2,6 +2,9 @@
 #include <vector>
 #include <algorithm>
 
+// https://refactoring.guru/design-patterns/observer
+///NOTE: Improve this design
+
 class Subject; 
 
 class Observer 
@@ -16,24 +19,24 @@ public:
 class Subject 
 { 
 public: 
-     virtual ~Subject() = default;
-     void Attach(Observer& o)
-      { 
+    virtual ~Subject() = default;
+    void Attach(Observer& o)
+    { 
         observers.push_back(&o);
-      }
-     void Detach(Observer& o)
-     {
+    }
+    void Detach(Observer& o)
+    {
         observers.erase(std::remove(observers.begin(),observers.end(),&o));
-     }
+    }
 
-     void Notify()
-     {
-         for (auto* o : observers) {
-             o->Update(*this);
-         }
-     }
+    void Notify()
+    {
+        for (auto* o : observers) {
+            o->Update(*this);
+        }
+    }
 private:
-     std::vector<Observer*> observers; 
+    std::vector<Observer*> observers; 
 };
 
 
@@ -63,68 +66,68 @@ private:
 class DigitalClock: public Observer 
 { 
 public: 
-     explicit DigitalClock(ClockTimer& s) : subject(s)
-      { 
+    explicit DigitalClock(ClockTimer& s) : subject(s)
+    { 
         subject.Attach(*this);
-      }
+    }
 
-     ~DigitalClock() 
-     { 
+    ~DigitalClock() 
+    { 
         subject.Detach(*this);
-     }
+    }
 
-     void Update(Subject& theChangedSubject) override
-     {
+    void Update(Subject& theChangedSubject) override
+    {
         if (&theChangedSubject == &subject) 
         {         
-             Draw();
+                Draw();
         }
-     }
+    }
 
-     void Draw()
-     {
-         int hour = subject.GetHour(); 
-         int minute = subject.GetMinute(); 
-         int second = subject.GetSecond(); 
+    void Draw()
+    {
+        int hour = subject.GetHour(); 
+        int minute = subject.GetMinute(); 
+        int second = subject.GetSecond(); 
 
-         std::cout << "Digital time is " << hour << ":" 
-                   << minute << ":" 
-                   << second << std::endl;           
-     }
+        std::cout << "Digital time is " << hour << ":" 
+                << minute << ":" 
+                << second << std::endl;           
+    }
 
 private:
-     ClockTimer& subject;
+    ClockTimer& subject;
 };
 
 class AnalogClock: public Observer 
 { 
 public: 
-     explicit AnalogClock(ClockTimer& s) : subject(s) 
-     {
-         subject.Attach(*this);
-     }
-     ~AnalogClock() 
-     {
-         subject.Detach(*this);
-     }
-     void Update(Subject& theChangedSubject) override
-     {
-         if (&theChangedSubject == &subject) {
-             Draw();
-         }
-     }
-     void Draw()
-     {
-         int hour = subject.GetHour(); 
-         int minute = subject.GetMinute(); 
-         int second = subject.GetSecond(); 
+    explicit AnalogClock(ClockTimer& s) : subject(s) 
+    {
+        subject.Attach(*this);
+    }
+    ~AnalogClock() 
+    {
+        subject.Detach(*this);
+    }
+    void Update(Subject& theChangedSubject) override
+    {
+        if (&theChangedSubject == &subject) {
+            Draw();
+        }
+    }
+    void Draw()
+    {
+        int hour = subject.GetHour(); 
+        int minute = subject.GetMinute(); 
+        int second = subject.GetSecond(); 
 
-         std::cout << "Analog time is " << hour << ":" 
-                   << minute << ":" 
-                   << second << std::endl; 
-     }
+        std::cout << "Analog time is " << hour << ":" 
+                << minute << ":" 
+                << second << std::endl; 
+    }
 private:
-     ClockTimer& subject;
+    ClockTimer& subject;
 };
 
 int main()
